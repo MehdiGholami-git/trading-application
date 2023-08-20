@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.db</groupId>
-	<artifactId>trading</artifactId>
+	<artifactId>trading-application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>trading</name>
+	<name>trading-application</name>
 	<description>Trading application project for Deutsche Bank</description>
 	<properties>
 		<java.version>17</java.version>
