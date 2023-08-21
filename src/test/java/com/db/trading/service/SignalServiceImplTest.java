@@ -63,4 +63,17 @@ class SignalServiceImplTest {
     Assertions.assertEquals(1, bySignalNo.get(1).getParam().getParamOne());
     Assertions.assertEquals(60, bySignalNo.get(1).getParam().getParamTwo());
   }
+
+  @Test
+  void handleSignal() {
+    List<String> signalMethods = signalService.handleSignal(3);
+    Assertions.assertEquals(4, signalMethods.size());
+    Assertions.assertEquals("setAlgoParam", signalMethods.get(0));
+    Assertions.assertEquals("submitToMarket", signalMethods.get(3));
+  }
+  @Test
+  void handleSignal_notExist() {
+    List<String> signalMethods = signalService.handleSignal(4);
+    Assertions.assertEquals(0, signalMethods.size());
+  }
 }

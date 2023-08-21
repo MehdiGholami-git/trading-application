@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface SignalService {
   List<Signal> findBySignalNo(Integer signalNo);
+
+  List<String> handleSignal(Integer signalNo);
 }
