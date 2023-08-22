@@ -1,5 +1,6 @@
 package com.db.trading.service;
 
+import com.db.trading.exception.SignalNotFoundException;
 import com.db.trading.lib.Algo;
 import com.db.trading.model.entities.AlgoMethod;
 import com.db.trading.model.entities.Param;
@@ -42,6 +43,9 @@ public class SignalServiceImpl implements SignalService {
   public List<String> handleSignal(Integer signalNo) {
     init();// just to prepare data for DB(could be removed)
     List<Signal> signals = signalRepository.findBySignalNo(signalNo);
+    if (signals.isEmpty()) {
+      throw new SignalNotFoundException("signalNo: " + signalNo +" not found!");
+    }
     List<String> methods = new ArrayList<>();
     for (Signal signal : signals) {
       callAlgo(signal);
@@ -53,30 +57,14 @@ public class SignalServiceImpl implements SignalService {
 
   private void callAlgo(Signal signal) {
     switch (signal.getAlgoMethod().getMethodName()) {
-      case DO_ALGO:
-        algo.doAlgo();
-        break;
-      case CANCEL_TRADES:
-        algo.cancelTrades();
-        break;
-      case REVERSE:
-        algo.reverse();
-        break;
-      case SUBMIT_TO_MARKET:
-        algo.submitToMarket();
-        break;
-      case PERFORM_CALC:
-        algo.performCalc();
-        break;
-      case SET_UP:
-        algo.setUp();
-        break;
-      case SET_ALGO_PARAM:
-        algo.setAlgoParam(signal.getParam().getParamOne(), signal.getParam().getParamTwo());
-        break;
-      default:
-        algo.cancelTrades();
-        break;
+      case DO_ALGO -> algo.doAlgo();
+      case CANCEL_TRADES -> algo.cancelTrades();
+      case REVERSE -> algo.reverse();
+      case SUBMIT_TO_MARKET -> algo.submitToMarket();
+      case PERFORM_CALC -> algo.performCalc();
+      case SET_UP -> algo.setUp();
+      case SET_ALGO_PARAM -> algo.setAlgoParam(signal.getParam().getParamOne(), signal.getParam().getParamTwo());
+      default -> algo.cancelTrades();
     }
   }
 

@@ -24,7 +24,7 @@ public class SignalRepositoryTest {
   private SignalRepository signalRepository;
 
   @Test
-  public void whenFindBySignalId_thenReturnSignal() {
+  public void whenFindBySignalNo_thenReturnSignal() {
     // given
     Param param = Param.builder().paramOne(1).paramTwo(16).build();
     entityManager.persist(param);

@@ -1,5 +1,6 @@
 package com.db.trading.service;
 
+import com.db.trading.exception.SignalNotFoundException;
 import com.db.trading.model.entities.AlgoMethod;
 import com.db.trading.model.entities.Param;
 import com.db.trading.model.entities.Signal;
@@ -69,9 +70,10 @@ class SignalServiceImplTest {
     Assertions.assertEquals("setAlgoParam", signalMethods.get(0));
     Assertions.assertEquals("submitToMarket", signalMethods.get(3));
   }
+
   @Test
   void handleSignal_notExist() {
-    List<String> signalMethods = signalService.handleSignal(4);
-    Assertions.assertEquals(0, signalMethods.size());
+    SignalNotFoundException signalNotFoundException = Assertions.assertThrows(SignalNotFoundException.class, () -> signalService.handleSignal(4));
+    Assertions.assertEquals("signalNo: 4 not found!", signalNotFoundException.getMessage());
   }
 }

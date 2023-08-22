@@ -22,7 +22,7 @@ public class ParamRepositoryTest {
   private ParamRepository paramRepository;
 
   @Test
-  public void whenFindBySignalId_thenReturnSignal() {
+  public void whenFindAll_thenReturnParam() {
     // given
     Param param = Param.builder().paramOne(1).paramTwo(16).build();
     entityManager.persist(param);

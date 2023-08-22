@@ -22,7 +22,7 @@ public class AlgoMethodRepositoryTest {
   private AlgoMethodRepository algoMethodRepository;
 
   @Test
-  public void whenFindByName_thenReturnAlgoMethod() {
+  public void whenFindByMethodName_thenReturnAlgoMethod() {
     // given
     AlgoMethod method = AlgoMethod.builder().methodName("teatMethod").build();
     entityManager.persist(method);
