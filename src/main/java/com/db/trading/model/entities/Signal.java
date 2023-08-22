@@ -30,6 +30,6 @@ public class Signal {
   @ManyToOne(cascade = CascadeType.ALL)
   private AlgoMethod algoMethod;
 
-  @OneToOne(mappedBy = "signal")
+  @OneToOne(cascade = CascadeType.ALL)
   private Param param;
 }

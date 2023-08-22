@@ -1,7 +1,11 @@
 package com.db.trading.service;
 
 import com.db.trading.lib.Algo;
+import com.db.trading.model.entities.AlgoMethod;
+import com.db.trading.model.entities.Param;
 import com.db.trading.model.entities.Signal;
+import com.db.trading.repository.AlgoMethodRepository;
+import com.db.trading.repository.ParamRepository;
 import com.db.trading.repository.SignalRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,12 @@ public class SignalServiceImpl implements SignalService {
   @Autowired
   private SignalRepository signalRepository;
 
+  @Autowired
+  AlgoMethodRepository algoMethodRepository;
+
+  @Autowired
+  ParamRepository paramRepository;
+
   @Override
   public List<Signal> findBySignalNo(Integer signalNo) {
     return signalRepository.findBySignalNo(signalNo);
@@ -30,6 +40,7 @@ public class SignalServiceImpl implements SignalService {
 
   @Override
   public List<String> handleSignal(Integer signalNo) {
+    init();// just to prepare data for DB(could be removed)
     List<Signal> signals = signalRepository.findBySignalNo(signalNo);
     List<String> methods = new ArrayList<>();
     for (Signal signal : signals) {
@@ -67,5 +78,32 @@ public class SignalServiceImpl implements SignalService {
         algo.cancelTrades();
         break;
     }
+  }
+
+  public void init() {
+    paramRepository.saveAll(List.of(Param.builder().id(1L).paramOne(1).paramTwo(60).build(),
+        Param.builder().id(2L).paramOne(1).paramTwo(80).build(),
+        Param.builder().id(3L).paramOne(1).paramTwo(90).build(),
+        Param.builder().id(4L).paramOne(2).paramTwo(15).build()));
+    algoMethodRepository.saveAll(List.of(AlgoMethod.builder().id(1L).methodName(DO_ALGO).build(),
+        AlgoMethod.builder().id(2L).methodName(CANCEL_TRADES).build(),
+        AlgoMethod.builder().id(3L).methodName(REVERSE).build(),
+        AlgoMethod.builder().id(4L).methodName(SUBMIT_TO_MARKET).build(),
+        AlgoMethod.builder().id(5L).methodName(PERFORM_CALC).build(),
+        AlgoMethod.builder().id(6L).methodName(SET_UP).build(),
+        AlgoMethod.builder().id(7L).methodName(SET_ALGO_PARAM).build()));
+    List<Param> params = paramRepository.findAll();
+    List<AlgoMethod> methods = algoMethodRepository.findAll();
+    signalRepository.saveAll(List.of(Signal.builder().id(1L).signalNo(1).algoMethod(methods.get(5)).build(),
+        Signal.builder().id(2L).signalNo(1).algoMethod(methods.get(6)).param(params.get(0)).build(),
+        Signal.builder().id(3L).signalNo(1).algoMethod(methods.get(4)).build(),
+        Signal.builder().id(4L).signalNo(1).algoMethod(methods.get(3)).build(),
+        Signal.builder().id(5L).signalNo(2).algoMethod(methods.get(2)).build(),
+        Signal.builder().id(6L).signalNo(2).algoMethod(methods.get(6)).param(params.get(1)).build(),
+        Signal.builder().id(7L).signalNo(2).algoMethod(methods.get(3)).build(),
+        Signal.builder().id(8L).signalNo(3).algoMethod(methods.get(6)).param(params.get(2)).build(),
+        Signal.builder().id(9L).signalNo(3).algoMethod(methods.get(6)).param(params.get(3)).build(),
+        Signal.builder().id(10L).signalNo(3).algoMethod(methods.get(4)).build(),
+        Signal.builder().id(11L).signalNo(3).algoMethod(methods.get(3)).build()));
   }
 }
